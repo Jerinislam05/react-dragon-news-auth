@@ -1,12 +1,25 @@
 import { Link } from "react-router-dom";
 import Navbar from "../Shared/Navbar/Navbar";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Login = () => {
+  const { signIn } = useContext(AuthContext);
+
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(e.currentTarget);
     const form = new FormData(e.currentTarget);
-    console.log(form.get('password'));
+    const email = form.get("email");
+    const password = form.get("password");
+    console.log(email, password);
+    signIn(email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -47,7 +60,12 @@ const Login = () => {
           <button className="btn btn-primary">Login</button>
         </div>
       </form>
-      <p className="text-center">Do not have an account <Link className="text-blue-600 font-bold" to="/register">Register</Link></p>
+      <p className="text-center">
+        Do not have an account{" "}
+        <Link className="text-blue-600 font-bold" to="/register">
+          Register
+        </Link>
+      </p>
     </div>
   );
 };
